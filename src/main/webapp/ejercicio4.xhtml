@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+    </h:head>
+    <h:body>
+
+        <h:form id="form">
+            <h3>Roles de usuarios</h3>
+
+            <!-- todo atributo debe de contener getter y setter -->
+            <c:forEach items="#{rolBean.roles}" var="rol">			
+                <p:commandButton value="#{rol.nombre}"
+                                 actionListener="${rolBean.cargarUsuarios(rol.id)}"
+                                 update=":form:dgRoles" />
+            </c:forEach>           
+            <br></br>
+            <p:dataTable var="car" value="#{rolBean.usuarios}" id="dgRoles">
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{car.nombre}" />
+                </p:column>
+
+                <p:column headerText="Paterno">
+                    <h:outputText value="#{car.paterno}" />
+                </p:column>
+
+                <p:column headerText="Materno">
+                    <h:outputText value="#{car.materno}" />
+                </p:column>
+
+                <p:column headerText="Correo">
+                    <h:outputText value="#{car.correo}" />
+                </p:column>
+
+                <p:column headerText="Detalle">
+                    <p:commandLink update=":form:usuarioDetalle"
+                                   oncomplete="PF('usuarioDialog').show()">
+                        <h:outputText value="Detalles" />
+                        <f:setPropertyActionListener value="#{car}" target="#{rolBean.seleccionado}" />
+                    </p:commandLink>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:dialog widgetVar="usuarioDialog" header="Detalle del Usuario"
+                      modal="true" >
+                <p:outputPanel id="usuarioDetalle" layout="block">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="txtNombre" value="Nombre: " />
+                        <h:outputText id="txtNombre" value="#{rolBean.seleccionado.nombre}" />
+                        <h:outputLabel for="txtPaterno" value="Paterno: " />
+                        <h:outputText id="txtDescripcion" value="#{rolBean.seleccionado.paterno}" />
+                        <h:outputLabel for="txtMaterno" value="Materno: " />
+                        <h:outputText id="txtPrecio" value="#{rolBean.seleccionado.materno}" />
+                    </h:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+
+
+        </h:form>
+    </h:body>
+</html>
+
